@@ -1,0 +1,41 @@
+#ifndef SNAKE_GAME_H
+#define SNAKE_GAME_H
+
+#include <chrono>
+#include <iostream>
+
+#include "Head.h"
+#include "Food.h"
+#include "Menu.h"
+
+class Game{
+private:
+    float deltaTime;
+    sf::Texture head_t, body_t, food_t;
+    sf::RectangleShape wall_top, wall_right, wall_bottom, wall_left;
+    sf::RenderWindow* window;
+    Menu* menu;
+    std::vector<Food*> food_vec;
+    Head* head;
+    std::vector<Body*> body_vec;
+    std::chrono::milliseconds current_time = getMilliseconds();
+    std::chrono::milliseconds endOfFrameTime = getMilliseconds();
+    int a = 0;
+    int b = 3;
+    Difficulty difficulty;
+    bool isGameRunning;
+
+public:
+    Game(Difficulty diff);
+    ~Game();
+    void DebugView() const;
+    void Init();
+    void Update();
+    void Draw();
+    bool isWindowOpen();
+    std::chrono::milliseconds getMilliseconds();
+    void StartGame();
+    void Stop();
+};
+
+#endif
