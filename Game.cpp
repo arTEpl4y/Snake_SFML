@@ -14,7 +14,7 @@ Game::~Game(){
 
 void Game::DebugView() const{
     if(isGameRunning){
-        std::cout << "FPS:" << 1/deltaTime << std::endl;
+        std::cout << "FPS: " << 1/deltaTime << std::endl;
     }
 }
 
