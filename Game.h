@@ -11,8 +11,11 @@
 class Game{
 private:
     float deltaTime;
-    sf::Texture head_t, body_t, food_t;
-    sf::RectangleShape wall_top, wall_right, wall_bottom, wall_left;
+    sf::Texture head_t, body_t, food_t, wall_t;
+    Entity* wall_top;
+    Entity* wall_right;
+    Entity* wall_bottom;
+    Entity* wall_left;
     sf::RenderWindow* window;
     Menu* menu;
     std::vector<Food*> food_vec;
@@ -26,7 +29,7 @@ private:
     bool isGameRunning;
 
 public:
-    Game(Difficulty diff);
+    Game();
     ~Game();
     void DebugView() const;
     void Init();

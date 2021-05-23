@@ -3,10 +3,9 @@
 #include "Head.h"
 
 Head::Head(int X_pos, int Y_pos, sf::Texture *texture, sf::RenderWindow *window, Difficulty diff)
-    :Body(X_pos, Y_pos, texture, window, nullptr){
+    :Body(X_pos, Y_pos, texture, window, diff, nullptr){
     i_direction = 1;
     p_direction = 0;
-    speed = diff*10;
 }
 
 void Head::Update(float deltaTime){
@@ -61,7 +60,7 @@ void Head::Update(float deltaTime){
     point.X = sprite.getPosition().x;
     point.Y = sprite.getPosition().y;
     history.emplace_back(point.X, point.Y);
-    if(history.size() > 20){
+    if(history.size() > max_history){
         history.pop_front();
     }
 }

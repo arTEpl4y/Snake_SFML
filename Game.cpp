@@ -1,14 +1,16 @@
 #include "Game.h"
 
-Game::Game(Difficulty diff){
+Game::Game(){
     srand(time(NULL));
-
-    difficulty = diff;
 }
 
 Game::~Game(){
-    delete menu;
     Stop();
+    delete menu;
+    delete wall_top;
+    delete wall_right;
+    delete wall_bottom;
+    delete wall_left;
     delete window;
 }
 
@@ -19,25 +21,20 @@ void Game::DebugView() const{
 }
 
 void Game::Init(){
+    window = new sf::RenderWindow(sf::VideoMode(800, 600), "Snake", sf::Style::Close);
+    window->setFramerateLimit(30);
+
     head_t.loadFromFile("../Textures/head.png");
     body_t.loadFromFile("../Textures/body.png");
     food_t.loadFromFile("../Textures/food.png");
+    wall_t.loadFromFile("../Textures/wall.png");
 
-    wall_top = sf::RectangleShape(sf::Vector2f(600, 12));
-    wall_top.setFillColor(sf::Color(128, 128, 128));
-    wall_top.setPosition(0, 0);
-    wall_right = sf::RectangleShape(sf::Vector2f(12, 600));
-    wall_right.setFillColor(sf::Color(128, 128, 128));
-    wall_right.setPosition(588, 0);
-    wall_bottom = sf::RectangleShape(sf::Vector2f(600, 12));
-    wall_bottom.setFillColor(sf::Color(128, 128, 128));
-    wall_bottom.setPosition(0, 588);
-    wall_left = sf::RectangleShape(sf::Vector2f(12, 600));
-    wall_left.setFillColor(sf::Color(128, 128, 128));
-    wall_left.setPosition(0, 0);
-
-    window = new sf::RenderWindow(sf::VideoMode(800, 600), "Snake", sf::Style::Close | sf::Style::Resize);
-    window->setFramerateLimit(30);
+    wall_top = new Entity(300, 5, &wall_t, window);
+    wall_right = new Entity(595, 300, &wall_t, window);
+    wall_right->sprite.setRotation(90);
+    wall_bottom = new Entity(300, 595, &wall_t, window);
+    wall_left = new Entity(5, 300, &wall_t, window);
+    wall_left->sprite.setRotation(90);
 
     menu = new Menu(window);
 
@@ -52,14 +49,13 @@ void Game::Update(){
     deltaTime = (endOfFrameTime-current_time).count()*0.001;
     current_time = getMilliseconds();
 
+    bool game_over = false;
+
     sf::Event event{};
     while(window->pollEvent(event)){
         switch(event.type){
             case sf::Event::Closed:
                 window->close();
-                break;
-            case sf::Event::Resized:
-                std::cout << event.size.width << " " << event.size.height << std::endl;
                 break;
             case sf::Event::MouseButtonPressed:
                 if(event.mouseButton.button==sf::Mouse::Left){
@@ -80,22 +76,34 @@ void Game::Update(){
 
     if(isGameRunning){
         head->Update(deltaTime);
+
+        if(head->checkCollision(wall_top) || head->checkCollision(wall_right) ||
+                head->checkCollision(wall_bottom) || head->checkCollision(wall_left)){
+            game_over = true;
+        }
+
         for(auto i:body_vec){
             i->Update(deltaTime);
             if(i->kimi_no_na_wa != head && head->checkCollision(i)){
-                Stop();
+                game_over = true;
             }
+        }
+
+        if(game_over){
+            Stop();
+            return;
         }
 
         for(auto i:food_vec){
             if(head->checkCollision(i)){
                 i->Spawn();
                 if(body_vec.size() == 0){
-                    body_vec.push_back(new Body(head->GetEntityX_pos(), head->GetEntityY_pos(), &body_t, window, head));
+                    body_vec.push_back(new Body(head->GetEntityX_pos(), head->GetEntityY_pos(), &body_t, window,
+                                                difficulty, head));
                 }else{
-                    body_vec.push_back(new Body(body_vec[body_vec.size()-1]->GetEntityX_pos(), body_vec[body_vec.size
-                                                        ()-1]->GetEntityY_pos(), &body_t,
-                                                window, body_vec[body_vec.size()-1]));
+                    body_vec.push_back(new Body(body_vec[body_vec.size()-1]->GetEntityX_pos(),
+                                                body_vec[body_vec.size()-1]->GetEntityY_pos(),
+                                                &body_t, window, difficulty, body_vec[body_vec.size()-1]));
                 }
                 //add score
             }
@@ -106,11 +114,12 @@ void Game::Update(){
             a = 0;
             b--;
             if(body_vec.size() == 0){
-                body_vec.push_back(new Body(head->GetEntityX_pos(), head->GetEntityY_pos(), &body_t, window, head));
+                body_vec.push_back(new Body(head->GetEntityX_pos(), head->GetEntityY_pos(), &body_t, window,
+                                            difficulty, head));
             }else{
                 body_vec.push_back(new Body(body_vec[body_vec.size()-1]->GetEntityX_pos(), body_vec[body_vec.size
                                                     ()-1]->GetEntityY_pos(), &body_t,
-                                            window, body_vec[body_vec.size()-1]));
+                                            window, difficulty, body_vec[body_vec.size()-1]));
             }
         }
     }
@@ -119,10 +128,10 @@ void Game::Update(){
 void Game::Draw(){
     window->clear(sf::Color(64, 64, 64));
     menu->Draw();
-    window->draw(wall_top);
-    window->draw(wall_right);
-    window->draw(wall_bottom);
-    window->draw(wall_left);
+    wall_left->Draw();
+    wall_right->Draw();
+    wall_top->Draw();
+    wall_bottom->Draw();
     if(isGameRunning){
         for(unsigned int i = 0; i < food_vec.size(); i++){
             food_vec[i]->Draw();
@@ -146,6 +155,8 @@ std::chrono::milliseconds Game::getMilliseconds(){
 void Game::StartGame(){
     isGameRunning = true;
 
+    difficulty = menu->selected_difficulty;
+
     food_vec = {};
     food_vec.push_back(new Food(0, 0, &food_t, window));
     food_vec.push_back(new Food(0, 0, &food_t, window));
@@ -159,21 +170,21 @@ void Game::StartGame(){
 
 void Game::Stop(){
     isGameRunning = false;
-    std::cout << "xd0";
+    //std::cout << "xd0";
     delete head;
     head = nullptr;
-    std::cout << "xd1";
+    //std::cout << "xd1";
     for(auto p:food_vec){
         delete p;
     }
-    std::cout << "xd2";
+    //std::cout << "xd2";
     for(auto p:body_vec){
         delete p;
     }
-    std::cout << "xd3";
+    //std::cout << "xd3";
     food_vec.clear();
-    std::cout << "xd4";
+    //std::cout << "xd4";
     body_vec.clear();
-    std::cout << "xd5\n";
+    //std::cout << "xd5\n";
     //DEBUGGING BTW
 }

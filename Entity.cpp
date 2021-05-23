@@ -5,7 +5,7 @@ Entity::Entity(int X_pos, int Y_pos, sf::Texture *texture, sf::RenderWindow *win
     sprite.setPosition(X_pos, Y_pos);
     sprite.setTexture(*texture);
     this->window = window;
-    sprite.setOrigin(5, 5);
+    sprite.setOrigin(GetEntity_width()/2, GetEntity_height()/2);
 }
 
 Entity::~Entity(){

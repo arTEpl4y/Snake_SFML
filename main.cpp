@@ -2,7 +2,7 @@
 
 int main(){
 
-    Game* game = new Game(HARD);
+    Game* game = new Game();
     game->Init();
 
     while(game->isWindowOpen()){
