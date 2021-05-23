@@ -168,21 +168,14 @@ void Game::StartGame(){
 
 void Game::Stop(){
     isGameRunning = false;
-    //std::cout << "xd0";
     delete head;
     head = nullptr;
-    //std::cout << "xd1";
     for(auto p:food_vec){
         delete p;
     }
-    //std::cout << "xd2";
     for(auto p:body_vec){
         delete p;
     }
-    //std::cout << "xd3";
     food_vec.clear();
-    //std::cout << "xd4";
     body_vec.clear();
-    //std::cout << "xd5\n";
-    //DEBUGGING BTW
 }
