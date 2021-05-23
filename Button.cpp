@@ -1,13 +1,11 @@
 #include "Button.h"
 
 Button::Button(int x_pos, int y_pos, int width, int height, sf::Color color, std::string string,
-               sf::RenderWindow* window){
+               sf::Font* font, sf::RenderWindow* window){
     button_shape = new sf::RectangleShape(sf::Vector2f(width, height));
     button_shape->setFillColor(color);
     button_shape->setPosition(x_pos, y_pos);
     button_shape->setOrigin(width/2, height/2);
-    font = new sf::Font;
-    font->loadFromFile("../arial.ttf");
     text = new sf::Text(string, *font, 20);
     text->setPosition(x_pos, y_pos);
     text->setOrigin(text->getGlobalBounds().width/2, text->getGlobalBounds().height/2+5);
@@ -17,7 +15,6 @@ Button::Button(int x_pos, int y_pos, int width, int height, sf::Color color, std
 Button::~Button(){
     delete button_shape;
     delete text;
-    delete font;
 }
 
 bool Button::isButtonPressed(sf::Event::MouseButtonEvent* mouse_event) const{

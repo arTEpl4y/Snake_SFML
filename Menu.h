@@ -14,13 +14,16 @@ private:
     Button* difficulties_hard;
     Button* back;
     Button* quit;
+    sf::RenderWindow* window;
+    sf::Font* font;
+    sf::Text* fps_counter;
     bool start_game_requested, quit_requested;
     bool inScoreView, inDifficultyView = false;
 
 public:
     Menu(sf::RenderWindow* window);
     ~Menu();
-    void Update();
+    void UpdateFPS(float deltaTime);
     void Draw();
     void CheckButtonPresses(sf::Event::MouseButtonEvent* mouse_event);
     bool RequestedQuit();
