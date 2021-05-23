@@ -16,6 +16,7 @@ private:
     Button* quit;
     sf::RenderWindow* window;
     sf::Font* font;
+    sf::Text* score_count;
     sf::Text* fps_counter;
     bool start_game_requested, quit_requested;
     bool inScoreView, inDifficultyView = false;
@@ -23,6 +24,7 @@ private:
 public:
     Menu(sf::RenderWindow* window);
     ~Menu();
+    void UpdateScoreText(int score);
     void UpdateFPS(float deltaTime);
     void Draw();
     void CheckButtonPresses(sf::Event::MouseButtonEvent* mouse_event);

@@ -103,7 +103,8 @@ void Game::Update(){
                                                 body_vec[body_vec.size()-1]->GetEntityY_pos(),
                                                 &body_t, window, difficulty, body_vec[body_vec.size()-1]));
                 }
-                //add score
+                score += 100;
+                menu->UpdateScoreText(score);
             }
         }
 
@@ -154,6 +155,9 @@ void Game::StartGame(){
     isGameRunning = true;
 
     difficulty = menu->selected_difficulty;
+
+    score = 0;
+    menu->UpdateScoreText(score);
 
     food_vec = {};
     food_vec.push_back(new Food(0, 0, &food_t, window));

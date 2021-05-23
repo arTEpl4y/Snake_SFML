@@ -12,9 +12,11 @@ Menu::Menu(sf::RenderWindow* window){
     difficulties_hard= new Button(700, 475, 130, 50, sf::Color(128, 128, 128), "HARD", font, window);
     back = new Button(700, 550, 130, 50, sf::Color(128, 128, 128), "BACK", font, window);
     quit = new Button(700, 550, 130, 50, sf::Color(128, 128, 128), "QUIT", font, window);
-    fps_counter = new sf::Text("0", *font, 12);
-    fps_counter->setOrigin(fps_counter->getGlobalBounds().width/2, fps_counter->getGlobalBounds().height/2+3);
-    fps_counter->setPosition(785, 590);
+    score_count = new sf::Text("SCORE: ", *font, 20);
+    score_count->setOrigin(0, score_count->getGlobalBounds().height/2+5);
+    score_count->setPosition(605, 270);
+    fps_counter = new sf::Text("FPS: ", *font, 12);
+    fps_counter->setPosition(750, 583);
 
     this->window = window;
 }
@@ -28,12 +30,17 @@ Menu::~Menu(){
     delete difficulties_hard;
     delete back;
     delete quit;
+    delete score_count;
     delete fps_counter;
     delete font;
 }
 
+void Menu::UpdateScoreText(int score) {
+    score_count->setString("SCORE: "+std::to_string(score));
+}
+
 void Menu::UpdateFPS(float deltaTime){
-    fps_counter->setString(std::to_string((int)((1/deltaTime))));
+    fps_counter->setString("FPS: "+std::to_string((int)((1/deltaTime))));
 }
 
 void Menu::Draw(){
@@ -43,6 +50,7 @@ void Menu::Draw(){
         difficulties_hard->Draw();
     }
     if(!inScoreView && !inDifficultyView){
+        window->draw(*score_count);
         start_game->Draw();
         high_scores->Draw();
         difficulties->Draw();
