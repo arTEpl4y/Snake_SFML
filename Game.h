@@ -24,7 +24,7 @@ private:
     std::chrono::milliseconds current_time = getMilliseconds();
     std::chrono::milliseconds endOfFrameTime = getMilliseconds();
     int a = 0;
-    int b = 3;
+    int b = 2;
     int score;
     Difficulty difficulty;
     bool isGameRunning;

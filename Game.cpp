@@ -132,12 +132,12 @@ void Game::Draw(){
     wall_top->Draw();
     wall_bottom->Draw();
     if(isGameRunning){
-        for(unsigned int i = 0; i < food_vec.size(); i++){
-            food_vec[i]->Draw();
+        for(auto i : food_vec){
+            i->Draw();
         }
         head->Draw();
-        for(unsigned int i = 0; i < body_vec.size(); i++){
-            body_vec[i]->Draw();
+        for(auto i : body_vec){
+            i->Draw();
         }
     }
     window->display();
@@ -154,16 +154,21 @@ std::chrono::milliseconds Game::getMilliseconds(){
 void Game::StartGame(){
     isGameRunning = true;
 
+    b = 2;
+
     difficulty = menu->selected_difficulty;
 
     score = 0;
     menu->UpdateScoreText(score);
 
     food_vec = {};
-    food_vec.push_back(new Food(0, 0, &food_t, window));
-    food_vec.push_back(new Food(0, 0, &food_t, window));
-    food_vec[0]->Spawn();
-    food_vec[1]->Spawn();
+
+    for(int i = 0; i < 5; i++){
+        food_vec.push_back(new Food(0, 0, &food_t, window));
+    }
+    for(int i = 0; i < 5; i++){
+        food_vec[i]->Spawn();
+    }
 
     head = new Head(300, 300, &head_t, window, difficulty);
 
