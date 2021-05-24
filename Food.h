@@ -7,7 +7,7 @@
 
 class Food : public Entity{
 private:
-    const int spawn_area = 575;
+    const int spawn_area = 570;
     const int border_of_spawn = 15;
 
 public:
