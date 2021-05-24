@@ -10,24 +10,24 @@
 
 class Game{
 private:
-    float deltaTime;
+    float deltaTime{};
     sf::Texture head_t, body_t, food_t, wall_t;
-    Entity* wall_top;
-    Entity* wall_right;
-    Entity* wall_bottom;
-    Entity* wall_left;
-    sf::RenderWindow* window;
-    Menu* menu;
+    Entity* wall_top{};
+    Entity* wall_right{};
+    Entity* wall_bottom{};
+    Entity* wall_left{};
+    sf::RenderWindow* window{};
+    Menu* menu{};
     std::vector<Food*> food_vec;
-    Head* head;
+    Head* head{};
     std::vector<Body*> body_vec;
     std::chrono::milliseconds current_time = getMilliseconds();
     std::chrono::milliseconds endOfFrameTime = getMilliseconds();
     int a = 0;
     int b = 2;
-    int score;
+    int score{};
     Difficulty difficulty;
-    bool isGameRunning;
+    bool isGameRunning{};
 
 public:
     Game();

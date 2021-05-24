@@ -1,7 +1,7 @@
 #include "Game.h"
 
 Game::Game(){
-    srand(time(NULL));
+    srand(time(nullptr));
 }
 
 Game::~Game(){
