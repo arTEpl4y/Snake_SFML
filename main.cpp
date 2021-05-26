@@ -6,8 +6,8 @@ int main(){
     game->Init();
 
     while(game->isWindowOpen()){
-        game->Update();
         game->DebugView();
+        game->Update();
         game->Draw();
     }
 
