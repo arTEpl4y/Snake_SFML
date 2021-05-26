@@ -18,6 +18,8 @@ Menu::Menu(sf::RenderWindow* window){
     fps_counter = new sf::Text("FPS: ", *font, 12);
     fps_counter->setPosition(750, 583);
 
+    score_text = new sf::Text("HIGHSCORES", *font, 20);
+
     this->window = window;
 }
 
@@ -32,6 +34,7 @@ Menu::~Menu(){
     delete quit;
     delete score_count;
     delete fps_counter;
+    delete score_text;
     delete font;
 }
 
@@ -43,7 +46,28 @@ void Menu::UpdateFPS(float deltaTime){
     fps_counter->setString("FPS: "+std::to_string((int)((1/deltaTime))));
 }
 
+/*void Menu::SaveHighscore(){
+
+}*/
+
+void Menu::ShowHighscores(){
+    std::string text;
+    int i = 0;
+    std::ifstream ReadFileHighscores("../highscores.txt");
+    while(std::getline(ReadFileHighscores, text)){
+        score_text->setString(text);
+        score_text->setOrigin(score_text->getGlobalBounds().width/2, score_text->getGlobalBounds().height/2+5);
+        score_text->setPosition(700, 50+i);
+        window->draw(*score_text);
+        i += 30;
+    }
+    ReadFileHighscores.close();
+}
+
 void Menu::Draw(){
+    if(inScoreView){
+        ShowHighscores();
+    }
     if(inDifficultyView){
         difficulties_easy->Draw();
         difficulties_normal->Draw();

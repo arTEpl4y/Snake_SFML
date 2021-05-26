@@ -1,6 +1,9 @@
 #ifndef SNAKE_MENU_H
 #define SNAKE_MENU_H
 
+#include <iostream>
+#include <fstream>
+
 #include "Button.h"
 #include "Difficulty.h"
 
@@ -18,6 +21,7 @@ private:
     sf::Font* font;
     sf::Text* score_count;
     sf::Text* fps_counter;
+    sf::Text* score_text;
     bool start_game_requested, quit_requested;
     bool inScoreView, inDifficultyView = false;
 
@@ -26,6 +30,8 @@ public:
     ~Menu();
     void UpdateScoreText(int score);
     void UpdateFPS(float deltaTime);
+    //void SaveHighscore();
+    void ShowHighscores();
     void Draw();
     void CheckButtonPresses(sf::Event::MouseButtonEvent* mouse_event);
     bool RequestedQuit();
