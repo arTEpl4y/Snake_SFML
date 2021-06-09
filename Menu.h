@@ -22,8 +22,8 @@ private:
     sf::Text* score_count;
     sf::Text* fps_counter;
     sf::Text* score_text;
-    bool start_game_requested, quit_requested;
-    bool inScoreView, inDifficultyView = false;
+    bool start_game_requested{}, quit_requested{};
+    bool inScoreView{}, inDifficultyView = false;
 
 public:
     Menu(sf::RenderWindow* window);
